@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>mung's advent calendar for benben</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --cream: #F4E4BC;
+      --sage: #82836D;
+      --rose: #A24D47;
+      --dusty-pink: #BF9B9B;
+
+      --bg: var(--cream);
+      --card: #FFF9F2;
+      --door-1: var(--dusty-pink);
+      --door-2: var(--rose);
+      --door-border: var(--sage);
+      --inside-bg: #FFFDF8;
+
+      --text-main: var(--rose);
+      --text-soft: var(--sage);
+
+      --radius: 1rem;
+      --gap: 0.75rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+    }
+
+    .wrapper {
+      max-width: 960px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 6px;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--rose);
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 0 0 18px;
+      color: var(--text-soft);
+      font-size: 0.95rem;
+    }
+
+    .calendar {
+      background-color: var(--card);
+      border-radius: 1.5rem;
+      padding: 18px;
+      border: 3px solid var(--door-border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--gap);
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .door {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius);
+      background-color: var(--cream);
+      padding: 4px;
+      perspective: 900px;
+      cursor: pointer;
+    }
+
+    .door-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: calc(var(--radius) - 4px);
+      background-color: #F8EED7;
+      border: 1px solid rgba(130, 131, 109, 0.5);
+    }
+
+    .front {
+      position: absolute;
+      inset: 0;
+      border-radius: calc(var(--radius) - 4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFDF8;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      transition:
+        transform 0.6s cubic-bezier(0.19, 1, 0.22, 1),
+        box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(130, 131, 109, 0.4);
+    }
+
+    .door:nth-child(odd) .front {
+      background-color: var(--door-1);
+    }
+
+    .door:nth-child(even) .front {
+      background-color: var(--door-2);
+    }
+
+    .front span {
+      font-size: 1.8rem;
+    }
+
+    .front small {
+      margin-top: 3px;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .door:hover .front {
+      box-shadow: 0 6px 12px rgba(130, 131, 109, 0.6);
+    }
+
+    .inside {
+      position: absolute;
+      inset: 4px;
+      border-radius: calc(var(--radius) - 4px);
+      background-color: var(--inside-bg);
+      padding: 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.45s ease 0.2s;
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      border: 1px solid rgba(130, 131, 109, 0.3);
+    }
+
+    .inside .emoji {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .inside strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .inside p {
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    /* flip + stay open */
+    .door.open .front {
+      transform: rotateY(-150deg);
+      box-shadow: 0 4px 10px rgba(130, 131, 109, 0.5);
+    }
+
+    .door.open .inside {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrapper" aria-label="mung's advent calendar for benben">
+    <h1>mung's advent calendar for benben</h1>
+    <p class="subtitle">a little suprise from me each day</p>
+
+    <section class="calendar">
+      <div class="grid">
+
+        <!-- Day 1 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>1</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">
+                <i class="fa-duotone fa-solid fa-carrot" style="font-size:2rem; color:#A24D47;"></i>
+              </div>
+
+              <strong>terminator bunny</strong>
+              <p> please do not make fun of my
+                <a href="gift/bunny.png" target="_blank" style="color:#A24D47; text-decoration:underline;">
+                  keychain
+                </a> :(
+              </p>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>2</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>3</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>4</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>5</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>6</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>7</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 8 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>8</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 9 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>9</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 10 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>10</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 11 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>11</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 12 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>12</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 13 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>13</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 14 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>14</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 15 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>15</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 16 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>16</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 17 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>17</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 18 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>18</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 19 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>19</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 20 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>20</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 21 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>21</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 22 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>22</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 23 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>23</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 24 -->
+        <div class="door" onclick="this.classList.toggle('open')">
+          <div class="door-inner">
+            <div class="front">
+              <span>24</span>
+              <small>open</small>
+            </div>
+            <div class="inside">
+              <div class="emoji">🍓</div>
+              <strong>hehe</strong>
+              <p>hey… you peeked early. this one unlocks later</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>∂
