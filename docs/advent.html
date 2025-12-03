@@ -6,8 +6,7 @@
   <title>mung's advent calendar for benben</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
     :root {
@@ -184,22 +183,39 @@
       border: 1px solid rgba(130, 131, 109, 0.3);
     }
 
+    /* hide the text before opening */
+    .inside {
+      opacity: 0;
+      visibility: hidden;
+      user-select: none;
+      /* cannot select text */
+    }
+
+    /* when door opens, show everything */
+    .door.open .inside {
+      opacity: 1;
+      visibility: visible;
+      user-select: text;
+      /* now selectable */
+    }
+
+
     .inside .emoji {
       font-size: 1.8rem;
       margin-bottom: 4px;
     }
 
     /* disable links when door closed */
-.inside a {
-  pointer-events: none;
-  opacity: 0.5;
-}
+    .inside a {
+      pointer-events: none;
+      opacity: 0.5;
+    }
 
-/* enable links only when open */
-.door.open .inside a {
-  pointer-events: auto;
-  opacity: 1;
-}
+    /* enable links only when open */
+    .door.open .inside a {
+      pointer-events: auto;
+      opacity: 1;
+    }
 
     .inside strong {
       display: block;
@@ -264,11 +280,11 @@
               <small>open</small>
             </div>
             <div class="inside">
-   <div class="emoji">
-  <i class="fa-solid fa-splotch" style="font-size:2rem; color:#A24D47;"></i>
-</div>
+              <div class="emoji">
+                <i class="fa-solid fa-splotch" style="font-size:2rem; color:#A24D47;"></i>
+              </div>
               <strong>saturn rings</strong>
-  <p>
+              <p>
                 my
                 <a href="gift/vivienne.png" target="_blank" style="color:#A24D47; text-decoration:underline;">
                   vee-vienne westwood
